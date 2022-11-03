@@ -1,24 +1,28 @@
 <?php
     
 
+    <?php
+    
+
     if(!empty($_POST) AND (empty($_POST['usuario'])) OR (empty($_POST['senha']))){
         header("location: index.php"); exit;
     }
 
     include 'config.php';
 
-    $usuario = $conn -> real_scape_string($_POST['usuario']);
-    $senha = $conn -> real_scape_string($_POST['senha']);
+    
+    $usuario = $conn->real_escape_string($_POST['usuario']);
+    $senha = $conn->real_escape_string($_POST['senha']);
 
     
 
     // validação de usuário e senha digitados
 
-    $sql = "SELECT `id`, `nome`, `nivel`, FROM `usuarios`
+    $sql = "SELECT `id`, `nome`, `nivel` FROM `usuarios`
         WHERE (`usuario`='".$usuario."') AND (`senha`='".sha1($senha)."')
         AND (`ativo`=1) LIMIT 1";
 
-    $resultado->$conn->query($sql);
+    $resultado=$conn->query($sql);
     
     if($resultado->num_rows !=1){
 
@@ -34,11 +38,11 @@
 
         if(!isset($_SESSION)) session_start();
 
-        $SESSION[`UsuarioID`]=$linha[`id`];
-        $SESSION[`UsuarioNome`]=$linha[`nome`];
-        $SESSION[`UsuarioNivel`]=$linha[`nivel`];
+        $_SESSION['UsuarioID']=$linha['id'];
+        $_SESSION['UsuarioNome']=$linha['nome'];
+        $_SESSION['UsuarioNivel']=$linha['nivel'];
 
-        header("location:restrito.php");exit;
+        header("location: restrito.php");exit;
 
     }
 ?>
